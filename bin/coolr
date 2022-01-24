@@ -1,0 +1,15 @@
+#!/bin/bash
+: ${SPIM:=/usr/bin/spim}
+: ${COOL_TRAP_HANDLER:=/home/sergio/dev/github/scarvalhojr/compilers/lib/trap.handler}
+
+if [ ! -x $SPIM ]; then
+  echo "MIPS32 simulator not found or not executable in '$SPIM'."
+  exit 1
+fi
+
+if [ ! -f $COOL_TRAP_HANDLER ]; then
+  echo "COOL trap handler not found in '$COOL_TRAP_HANDLER'."
+  exit 1
+fi
+
+exec $SPIM -exception_file $COOL_TRAP_HANDLER -file "$@"
