@@ -105,4 +105,57 @@ numbers are handled correctly.
         fi
     };
 
+    is_digit(s: String) : Bool {
+        if s = "0" then
+            true
+        else if s = "1" then
+            true
+        else if s = "2" then
+            true
+        else if s = "3" then
+            true
+        else if s = "4" then
+            true
+        else if s = "5" then
+            true
+        else if s = "6" then
+            true
+        else if s = "7" then
+            true
+        else if s = "8" then
+            true
+        else if s = "9" then
+            true
+        else
+            false
+        fi fi fi fi fi fi fi fi fi fi
+    };
+
+    is_integer(s: String) : Bool {
+        if s.substr(0, 1) = "-" then
+            is_integer_no_sign(s.substr(1, s.length() - 1))
+        else if s.substr(0, 1) = "+" then
+            is_integer_no_sign(s.substr(1, s.length() - 1))
+        else
+            is_all_digits(s)
+        fi fi
+    };
+
+    is_integer_no_sign(s: String) : Bool {
+        if s.length() = 0 then
+            false
+        else
+            is_all_digits(s)
+        fi
+    };
+
+    is_all_digits(s: String) : Bool {
+        if s.length() = 0 then
+            true
+        else if is_digit(s.substr(0, 1)) then
+            is_all_digits(s.substr(1, s.length() - 1))
+        else
+            false
+        fi fi
+    };
 };
