@@ -137,10 +137,10 @@ class Top inherits Stack {
 
 (*
  * This class represents the possible commands that can be performed on a Stack.
- * The commands can push an integer (PushInt) or an operator (PushOperator),
- * evaluate the top of the stack (Evaluate), or display the contents of the
- * stack (Display). Stop tells the program to terminate. InvalidCommand is used
- * to indicate that an invalid command was entered.
+ * The commands can push an integer or an operator (Push), evaluate the top of
+ * the stack (Evaluate), or display the contents of the stack (Display). Stop
+ * tells the program to terminate. InvalidCommand is used to indicate that an
+ * invalid command was entered.
  *)
 class StackCommand {
    exec(stack: Stack) : Stack {
@@ -148,9 +148,9 @@ class StackCommand {
    };
    parse(command: String) : StackCommand {
       if command = "+" then
-         (new PushOperator).init(new Addition)
+         (new Push).init(new Addition)
       else if command = "s" then
-         (new PushOperator).init(new Swap)
+         (new Push).init(new Swap)
       else if command = "e" then
          new Evaluate
       else if command = "d" then
@@ -160,7 +160,7 @@ class StackCommand {
       else {
          let a2i : A2I <- new A2I in
             if a2i.is_integer(command) then
-               (new PushInt).init(a2i.a2i(command))
+               (new Push).init((new Integer).init(a2i.a2i(command)))
             else
                new InvalidCommand
             fi;
@@ -169,29 +169,16 @@ class StackCommand {
    };
 };
 
-class PushInt inherits StackCommand {
-   value : Int;
-   init(val: Int) : SELF_TYPE {
+class Push inherits StackCommand {
+   element : Element;
+   init(elem: Element) : SELF_TYPE {
       {
-         value <- val;
+         element <- elem;
          self;
       }
    };
    exec(stack: Stack) : Stack {
-      stack.push((new Integer).init(value))
-   };
-};
-
-class PushOperator inherits StackCommand {
-   operator : Operator;
-   init(op: Operator) : SELF_TYPE {
-      {
-         operator <- op;
-         self;
-      }
-   };
-   exec(stack: Stack) : Stack {
-      stack.push(operator)
+      stack.push(element)
    };
 };
 
@@ -203,11 +190,8 @@ class Evaluate inherits StackCommand {
          };
          top : Top => {
             case top.peek() of
-               add : Addition => {
-                  add.operate(top.pop());
-               };
-               swap : Swap => {
-                  swap.operate(top.pop());
+               operator : Operator => {
+                  operator.operate(top.pop());
                };
                other : Element => {
                   top;
@@ -255,7 +239,7 @@ class Main inherits IO {
       let continue : Bool <- true in {
          while continue loop {
             {
-               out_string("Enter command: ");
+               out_string(">");
                let cmd : StackCommand <- command.parse(in_string()) in
                   case cmd of
                      cmd : Stop => {
