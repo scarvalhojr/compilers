@@ -1,0 +1,9 @@
+#name "tests/test_eof_in_string.cl"
+#1 CLASS
+#1 TYPEID Foo
+#1 '{'
+#2 OBJECTID bar
+#2 ':'
+#2 TYPEID String
+#2 ASSIGN
+#2 ERROR "EOF in string constant"

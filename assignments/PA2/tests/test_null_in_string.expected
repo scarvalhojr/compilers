@@ -1,0 +1,10 @@
+#name "tests/test_null_in_string.cl"
+#1 CLASS
+#1 TYPEID Foo
+#1 '{'
+#2 OBJECTID bar
+#2 ':'
+#2 TYPEID String
+#2 ASSIGN
+#2 ERROR "String contains null character."
+#3 '}'

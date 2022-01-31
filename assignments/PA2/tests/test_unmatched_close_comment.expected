@@ -1,0 +1,12 @@
+#name "tests/test_unmatched_close_comment.cl"
+#1 ERROR "Unmatched *)"
+#2 CLASS
+#2 TYPEID Foo
+#2 '{'
+#3 OBJECTID value
+#3 ':'
+#3 TYPEID Int
+#3 ASSIGN
+#3 INT_CONST 0
+#3 ';'
+#4 '}'

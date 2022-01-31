@@ -1,0 +1,10 @@
+#name "tests/test_unterminated_string.cl"
+#1 CLASS
+#1 TYPEID Foo
+#1 '{'
+#2 OBJECTID bar
+#2 ':'
+#2 TYPEID String
+#2 ASSIGN
+#3 ERROR "Unterminated string constant"
+#3 '}'

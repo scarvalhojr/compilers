@@ -2,9 +2,9 @@
 ASSN = 2
 CLASS= cs143
 CLASSDIR= ../..
-LIB= -lfl
+LIB=
 
-SRC= cool.flex test.cl README 
+SRC= cool.flex tests/test.cl README
 CSRC= lextest.cc utilities.cc stringtab.cc handle_flags.cc
 TSRC= mycoolc
 HSRC= 
@@ -14,7 +14,7 @@ LIBS= parser semant cgen
 CFIL= ${CSRC} ${CGEN}
 LSRC= Makefile
 OBJS= ${CFIL:.cc=.o}
-OUTPUT= test.output
+OUTPUT= tests/test.output
 
 CPPINCLUDE= -I. -I${CLASSDIR}/include/PA${ASSN} -I${CLASSDIR}/src/PA${ASSN}
 
@@ -31,9 +31,9 @@ source : ${SRC} ${TSRC} ${LSRC} ${LIBS} lsource
 
 lsource: ${LSRC}
 
-${OUTPUT}:	lexer test.cl
-	@rm -f test.output
-	-./lexer test.cl >test.output 2>&1 
+${OUTPUT}:	lexer tests/test.cl
+	@rm -f ${OUTPUT}
+	-./lexer tests/test.cl > ${OUTPUT} 2>&1
 
 lexer: ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} ${LIB} -o lexer
@@ -44,8 +44,8 @@ lexer: ${OBJS}
 cool-lex.cc: cool.flex 
 	${FLEX} cool.flex
 
-dotest:	lexer test.cl
-	./lexer test.cl
+dotest:	lexer tests/test.cl
+	./lexer tests/test.cl
 
 ${LIBS}:
 	${CLASSDIR}/etc/link-object ${ASSN} $@
