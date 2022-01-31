@@ -35,6 +35,7 @@ extern FILE *fin; /* we read from this file */
 char string_buf[MAX_STR_CONST];
 char *string_buf_ptr;
 bool string_with_null;
+bool string_with_escaped_null;
 bool string_too_long;
 
 extern int curr_lineno;
@@ -74,7 +75,7 @@ INT_CONST       [0-9]+
 STR_CONST       [^"\\]+
 STR_ESCAPE      \\
 NEWLINE         \r?\n
-WHITESPACE      [ \t]+
+WHITESPACE      [ \t\r\f\v]+
 NULL            \0
 
 %%
@@ -137,6 +138,7 @@ NULL            \0
     string_buf_ptr = string_buf;
     string_too_long = false;
     string_with_null = false;
+    string_with_escaped_null = false;
     BEGIN(STRING);
 }
 <STRING>{
@@ -144,6 +146,9 @@ NULL            \0
         BEGIN(INITIAL);
         if (string_with_null) {
             cool_yylval.error_msg = "String contains null character.";
+            return (ERROR);
+        } else if (string_with_escaped_null) {
+            cool_yylval.error_msg = "String contains escaped null character.";
             return (ERROR);
         } else if (string_too_long) {
             cool_yylval.error_msg = "String constant too long";
@@ -160,7 +165,15 @@ NULL            \0
         BEGIN(INITIAL);
         return (ERROR);
     }
-    \\.         {
+    {NULL}      {
+        string_with_null = true;
+    }
+    \\(.|\n)    {
+        if (yytext[1] == '\n')
+            curr_lineno++;
+        else if (yytext[1] == '\0')
+            string_with_escaped_null = true;
+
         if (string_buf_ptr - string_buf + 2 > MAX_STR_CONST) {
             // We'll overflow if we add 1 character and 1 zero byte terminator
             string_too_long = true;
@@ -184,9 +197,6 @@ NULL            \0
                     break;
             }
         }
-    }
-    {NULL}      {
-        string_with_null = true;
     }
     .           {
         if (string_buf_ptr - string_buf + 2 > MAX_STR_CONST) {
