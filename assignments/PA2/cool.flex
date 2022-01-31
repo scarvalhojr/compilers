@@ -121,12 +121,12 @@ NULL            \0
 }
 
 {TYPEID}     {
-    cool_yylval.symbol = inttable.add_string(yytext);
+    cool_yylval.symbol = idtable.add_string(yytext);
     return (TYPEID);
 }
 
 {OBJECTID}   {
-    cool_yylval.symbol = inttable.add_string(yytext);
+    cool_yylval.symbol = idtable.add_string(yytext);
     return (OBJECTID);
 }
 
@@ -155,7 +155,7 @@ NULL            \0
             return (ERROR);
         } else {
             *string_buf_ptr = '\0';
-            cool_yylval.symbol = inttable.add_string(string_buf);
+            cool_yylval.symbol = stringtable.add_string(string_buf);
             return (STR_CONST);
         }
     }
